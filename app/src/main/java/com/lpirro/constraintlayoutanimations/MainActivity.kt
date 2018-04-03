@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         transition.duration = 1200
 
         TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint)
+        constraintSet.applyTo(constraint) //here constraint is the name of view to which we are applying the constraintSet
     }
 
     private fun hideComponents(){
@@ -49,6 +49,6 @@ class MainActivity : AppCompatActivity() {
         transition.duration = 1200
 
         TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint)
+        constraintSet.applyTo(constraint)  //here constraint is the name of view to which we are applying the constraintSet
     }
 }
