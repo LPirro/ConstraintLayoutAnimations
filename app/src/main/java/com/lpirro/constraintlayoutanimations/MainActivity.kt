@@ -1,54 +1,43 @@
 package com.lpirro.constraintlayoutanimations
 
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
-import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.view.View
 import android.view.animation.AnticipateOvershootInterpolator
-import kotlinx.android.synthetic.main.circuit.*
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 
 class MainActivity : AppCompatActivity() {
 
     private var show = false
+    lateinit var constraintLayout: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.circuit)
 
+        constraintLayout = findViewById(R.id.constraint)
+
+        val backgroundImage = findViewById<View>(R.id.backgroundImage)
         backgroundImage.setOnClickListener {
-            if(show)
-                hideComponents() // if the animation is shown, we hide back the views
-            else
-                showComponents() // if the animation is NOT shown, we animate the views
+            show = !show
+            if (show) changeConstraints(R.layout.circuit_detail) // if the animation is NOT shown, we animate the views
+            else changeConstraints(R.layout.circuit) // if the animation is shown, we hide back the views
         }
     }
 
-    private fun showComponents(){
-        show = true
-
+    private fun changeConstraints(@LayoutRes newConstraintLayout: Int) {
         val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.circuit_detail)
+        constraintSet.clone(this, newConstraintLayout)
 
         val transition = ChangeBounds()
         transition.interpolator = AnticipateOvershootInterpolator(1.0f)
         transition.duration = 1200
 
-        TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint) //here constraint is the name of view to which we are applying the constraintSet
-    }
-
-    private fun hideComponents(){
-        show = false
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.circuit)
-
-        val transition = ChangeBounds()
-        transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-        transition.duration = 1200
-
-        TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint)  //here constraint is the name of view to which we are applying the constraintSet
+        TransitionManager.beginDelayedTransition(constraintLayout, transition)
+        constraintSet.applyTo(constraintLayout)  //here constraint is the name of view to which we are applying the constraintSet
     }
 }
